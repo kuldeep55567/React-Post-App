@@ -1,23 +1,36 @@
-import logo from './logo.svg';
 import './App.css';
-
+import Addpost from './Components/Addpost';
+import Post from './Components/Post';
+import { useState } from 'react';
 function App() {
+  const [posts,setPosts] = useState([])
+  const addPost = (username,caption)=>{
+    const new_post = {username,caption};
+    setPosts([...posts,new_post])
+  }
+  const updatePost = (index,username,caption)=>{
+    const updated = [...posts]
+    updated[index] = {...updated,username,caption}
+    setPosts(updatePost)
+  }
+  const deletePost = (index)=>{
+    const deletedPost = [...posts];
+    deletePost.splice(index,1)
+    setPosts(deletedPost)
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div >
+   <h1>Instagram</h1>
+   <Addpost addpost={addPost}/>
+   {posts.length===0?(
+    <p>Create your First Post</p>
+   ):(
+    <p>
+      {posts.map((post,index)=>(
+        <Post key={index} post={post} index={index} update={updatePost}deleted={deletePost} />
+      ))}
+    </p>
+   )}
     </div>
   );
 }
